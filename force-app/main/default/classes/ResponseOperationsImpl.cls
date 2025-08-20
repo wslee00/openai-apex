@@ -15,34 +15,48 @@ public class ResponseOperationsImpl implements ResponseOperations {
     }
 
     public Response create(ResponseCreateParams params, RequestOptions options) {
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint(this.client.getBaseUrl() + '/responses');
+        req.setMethod('POST');
+        req.setHeader('Content-Type', 'application/json');
+        req.setHeader('Authorization', 'Bearer ' + this.client.getApiKey());
+        Boolean suppressApexObjectNulls = true;
+        req.setBody(JSON.serialize(params, suppressApexObjectNulls));
+
+        Http http = new Http();
+        System.debug('Request: ' + req.getBody());
+        HttpResponse res = http.send(req);
+        System.debug('Response: ' + res.getBody());
+        return (Response) JSON.deserialize(res.getBody(), Response.class);
+
         // TODO: Implement actual HTTP callout to OpenAI API
         // For now, return a mock response
 
-        Response mockResponse = new Response();
-        mockResponse.id = 'resp_' + String.valueOf(Datetime.now().getTime());
-        mockResponse.objectX = 'response';
-        mockResponse.created = Datetime.now().getTime();
-        mockResponse.model = params.model;
+        // Response mockResponse = new Response();
+        // mockResponse.id = 'resp_' + String.valueOf(Datetime.now().getTime());
+        // mockResponse.objectX = 'response';
+        // mockResponse.created = Datetime.now().getTime();
+        // mockResponse.model = params.model;
 
-        Response.Choice choice = new Response.Choice();
-        choice.index = 0;
-        choice.finishReason = 'stop';
+        // Response.Choice choice = new Response.Choice();
+        // choice.index = 0;
+        // choice.finishReason = 'stop';
 
-        Response.Message message = new Response.Message();
-        message.role = 'assistant';
-        message.content = 'This is a test response for: ' + params.input;
+        // Response.Message message = new Response.Message();
+        // message.role = 'assistant';
+        // message.content = 'This is a test response for: ' + params.input;
 
-        choice.message = message;
-        mockResponse.choices.add(choice);
+        // choice.message = message;
+        // mockResponse.choices.add(choice);
 
-        Response.Usage usage = new Response.Usage();
-        usage.promptTokens = params.input.length();
-        usage.completionTokens = message.content.length();
-        usage.totalTokens = usage.promptTokens + usage.completionTokens;
+        // Response.Usage usage = new Response.Usage();
+        // usage.promptTokens = params.input.length();
+        // usage.completionTokens = message.content.length();
+        // usage.totalTokens = usage.promptTokens + usage.completionTokens;
 
-        mockResponse.usage = usage;
+        // mockResponse.usage = usage;
 
-        return mockResponse;
+        // return mockResponse;
     }
 
     public Response retrieve(String responseId) {

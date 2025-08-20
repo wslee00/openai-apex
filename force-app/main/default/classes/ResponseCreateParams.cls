@@ -20,9 +20,6 @@ public class ResponseCreateParams {
     public Map<String, String> additionalQueryParams { get; set; }
 
     public ResponseCreateParams() {
-        this.additionalProperties = new Map<String, Object>();
-        this.additionalHeaders = new Map<String, String>();
-        this.additionalQueryParams = new Map<String, String>();
     }
 
     /**
@@ -51,7 +48,14 @@ public class ResponseCreateParams {
          * @return This builder instance
          */
         public Builder model(ChatModel model) {
-            this.params.model = model.name();
+            switch on model {
+                when GPT_4_1 {
+                    this.params.model = 'gpt-4.1';
+                }
+                when else {
+                    this.params.model = model.name();
+                }
+            }
             return this;
         }
 
