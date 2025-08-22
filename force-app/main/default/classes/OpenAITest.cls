@@ -7,11 +7,10 @@
 public class OpenAITest {
     @IsTest
     static void testOpenAIClientCreation() {
-        OpenAIClient client = OpenAIOkHttpClient.fromNamedCredential('OpenAI');
+        OpenAIClient client = OpenAIClient.fromNamedCredential('OpenAI');
 
         // Verify client is created
         System.assertNotEquals(null, client, 'Client should not be null');
-        System.assert(client instanceof OpenAIOkHttpClient, 'Client should be instance of OpenAIOkHttpClient');
     }
 
     @IsTest
@@ -95,7 +94,7 @@ public class OpenAITest {
     @IsTest
     static void testOpenAIClientBuilder() {
         // Test the builder pattern
-        OpenAIOkHttpClient client = OpenAIOkHttpClient.builder()
+        OpenAIClient client = OpenAIClient.builder()
             .apiKey('test-api-key')
             .orgId('test-org-id')
             .projectId('test-project-id')
@@ -112,17 +111,6 @@ public class OpenAITest {
     }
 
     @IsTest
-    static void testOpenAIClientBuilderValidation() {
-        // Test validation - should throw exception for missing API key
-        try {
-            OpenAIOkHttpClient client = OpenAIOkHttpClient.builder().orgId('test-org-id').build();
-            System.assert(false, 'Should have thrown exception for missing API key');
-        } catch (IllegalStateException e) {
-            System.assertEquals('API key is required', e.getMessage(), 'Exception message should match');
-        }
-    }
-
-    @IsTest
     static void testResponseOperations() {
         // Test the equivalent of the Java code:
         // Response response = client.responses().create(params);
@@ -130,7 +118,7 @@ public class OpenAITest {
         // Set the mock callout
         Test.setMock(HttpCalloutMock.class, new OpenAIMockHttpCallout());
 
-        OpenAIClient client = OpenAIOkHttpClient.fromNamedCredential('OpenAI');
+        OpenAIClient client = OpenAIClient.fromNamedCredential('OpenAI');
         ResponseCreateParams params = ResponseCreateParams.builder()
             .input('Say this is a test')
             .model(ChatModel.GPT_4_1)
@@ -151,7 +139,7 @@ public class OpenAITest {
     @IsTest
     static void testChatOperations() {
         // Test chat operations
-        OpenAIClient client = OpenAIOkHttpClient.fromNamedCredential('OpenAI');
+        OpenAIClient client = OpenAIClient.fromNamedCredential('OpenAI');
 
         // Verify chat operations are accessible
         System.assertNotEquals(null, client.chat(), 'Chat operations should not be null');

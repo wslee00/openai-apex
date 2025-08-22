@@ -1,108 +1,249 @@
 /**
- * @description Interface for OpenAI API client operations
+ * @description OpenAI HTTP client implementation using Salesforce HTTP callouts
  * @author OpenAI Apex Implementation
  * @version 1.0.0
  */
-public interface OpenAIClient {
-    /**
-     * @description Access to responses API operations
-     * @return ResponseOperations instance
-     */
-    ResponseOperations responses();
+public class OpenAIClient {
+    private String apiKey;
+    private String orgId;
+    private String projectId;
+    private String baseUrl;
+    private Boolean responseValidation;
+    private Integer timeout;
+
+    public OpenAIClient() {
+        this.baseUrl = 'callout:OpenAI/v1';
+        this.responseValidation = false;
+        this.timeout = 60000;
+    }
 
     /**
-     * @description Access to chat API operations
-     * @return ChatOperations instance
+     * @description Create client from environment variables
+     * @return OpenAIClient instance
      */
-    ChatOperations chat();
+    public static OpenAIClient fromNamedCredential(String namedCredential) {
+        OpenAIClient client = new OpenAIClient();
+        client.baseUrl = 'callout:' + namedCredential + '/v1';
+
+        return client;
+    }
 
     /**
-     * @description Access to models API operations
-     * @return ModelsOperations instance
+     * @description Builder class for OpenAIClient
      */
-    ModelsOperations models();
+    public class Builder {
+        private OpenAIClient client;
+
+        public Builder() {
+            this.client = new OpenAIClient();
+        }
+
+        /**
+         * @description Set API key
+         * @param apiKey The OpenAI API key
+         * @return This builder instance
+         */
+        public Builder apiKey(String apiKey) {
+            this.client.apiKey = apiKey;
+            return this;
+        }
+
+        /**
+         * @description Set organization ID
+         * @param orgId The OpenAI organization ID
+         * @return This builder instance
+         */
+        public Builder orgId(String orgId) {
+            this.client.orgId = orgId;
+            return this;
+        }
+
+        /**
+         * @description Set project ID
+         * @param projectId The OpenAI project ID
+         * @return This builder instance
+         */
+        public Builder projectId(String projectId) {
+            this.client.projectId = projectId;
+            return this;
+        }
+
+        /**
+         * @description Set base URL
+         * @param baseUrl The base URL for OpenAI API
+         * @return This builder instance
+         */
+        public Builder baseUrl(String baseUrl) {
+            this.client.baseUrl = baseUrl;
+            return this;
+        }
+
+        /**
+         * @description Enable response validation
+         * @param validation Whether to validate responses
+         * @return This builder instance
+         */
+        public Builder responseValidation(Boolean validation) {
+            this.client.responseValidation = validation;
+            return this;
+        }
+
+        /**
+         * @description Set timeout
+         * @param timeout Timeout in milliseconds
+         * @return This builder instance
+         */
+        public Builder timeout(Integer timeout) {
+            this.client.timeout = timeout;
+            return this;
+        }
+
+        /**
+         * @description Build the OpenAIClient instance
+         * @return OpenAIClient instance
+         */
+        public OpenAIClient build() {
+            return this.client;
+        }
+    }
 
     /**
-     * @description Access to files API operations
-     * @return FilesOperations instance
+     * @description Get a new builder instance
+     * @return Builder instance
      */
-    FilesOperations files();
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    // API operation methods
+
+    public ResponseOperations responses() {
+        return new ResponseOperationsImpl(this);
+    }
+
+    public ChatOperations chat() {
+        return new ChatOperationsImpl(this);
+    }
+
+    public ModelsOperations models() {
+        return new ModelsOperationsImpl();
+    }
+
+    public FilesOperations files() {
+        return new FilesOperationsImpl();
+    }
+
+    public FineTuningOperations fineTuning() {
+        return new FineTuningOperationsImpl();
+    }
+
+    public EmbeddingsOperations embeddings() {
+        return new EmbeddingsOperationsImpl();
+    }
+
+    public ModerationsOperations moderations() {
+        return new ModerationsOperationsImpl();
+    }
+
+    public AudioOperations audio() {
+        return new AudioOperationsImpl();
+    }
+
+    public ImagesOperations images() {
+        return new ImagesOperationsImpl();
+    }
+
+    public AssistantsOperations assistants() {
+        return new AssistantsOperationsImpl();
+    }
+
+    public ThreadsOperations threads() {
+        return new ThreadsOperationsImpl();
+    }
+
+    public RunsOperations runs() {
+        return new RunsOperationsImpl();
+    }
+
+    public MessagesOperations messages() {
+        return new MessagesOperationsImpl();
+    }
+
+    public VectorStoresOperations vectorStores() {
+        return new VectorStoresOperationsImpl();
+    }
+
+    public VectorStoreFilesOperations vectorStoreFiles() {
+        return new VectorStoreFilesOperationsImpl();
+    }
+
+    public BatchesOperations batches() {
+        return new BatchesOperationsImpl();
+    }
+
+    public BetaOperations beta() {
+        return new BetaOperationsImpl();
+    }
 
     /**
-     * @description Access to fine-tuning API operations
-     * @return FineTuningOperations instance
+     * @description Get the API key
+     * @return API key
      */
-    FineTuningOperations fineTuning();
+    public String getApiKey() {
+        return this.apiKey;
+    }
 
     /**
-     * @description Access to embeddings API operations
-     * @return EmbeddingsOperations instance
+     * @description Get the base URL
+     * @return Base URL
      */
-    EmbeddingsOperations embeddings();
+    public String getBaseUrl() {
+        return this.baseUrl;
+    }
 
     /**
-     * @description Access to moderations API operations
-     * @return ModerationsOperations instance
+     * @description Get response validation setting
+     * @return Response validation setting
      */
-    ModerationsOperations moderations();
+    public Boolean getResponseValidation() {
+        return this.responseValidation;
+    }
 
     /**
-     * @description Access to audio API operations
-     * @return AudioOperations instance
+     * @description Get timeout setting
+     * @return Timeout in milliseconds
      */
-    AudioOperations audio();
+    public Integer getTimeout() {
+        return this.timeout;
+    }
 
     /**
-     * @description Access to images API operations
-     * @return ImagesOperations instance
+     * @description Make HTTP request to OpenAI API
+     * @param endpoint The API endpoint (without base URL)
+     * @param method HTTP method (GET, POST, etc.)
+     * @param body Request body for POST/PUT requests
+     * @param options Additional request options
+     * @return HttpResponse from the API
      */
-    ImagesOperations images();
+    public HttpResponse makeRequest(String endpoint, String method, String body, RequestOptions options) {
+        HttpRequest req = new HttpRequest();
+        req.setEndpoint(this.baseUrl + endpoint);
+        req.setMethod(method);
+        req.setHeader('Content-Type', 'application/json');
 
-    /**
-     * @description Access to assistants API operations
-     * @return AssistantsOperations instance
-     */
-    AssistantsOperations assistants();
+        if (this.orgId != null) {
+            req.setHeader('OpenAI-Organization', this.orgId);
+        }
 
-    /**
-     * @description Access to threads API operations
-     * @return ThreadsOperations instance
-     */
-    ThreadsOperations threads();
+        if (body != null) {
+            req.setBody(body);
+        }
 
-    /**
-     * @description Access to runs API operations
-     * @return RunsOperations instance
-     */
-    RunsOperations runs();
+        if (this.timeout != null) {
+            req.setTimeout(this.timeout);
+        }
 
-    /**
-     * @description Access to messages API operations
-     * @return MessagesOperations instance
-     */
-    MessagesOperations messages();
-
-    /**
-     * @description Access to vector stores API operations
-     * @return VectorStoresOperations instance
-     */
-    VectorStoresOperations vectorStores();
-
-    /**
-     * @description Access to vector store files API operations
-     * @return VectorStoreFilesOperations instance
-     */
-    VectorStoreFilesOperations vectorStoreFiles();
-
-    /**
-     * @description Access to batches API operations
-     * @return BatchesOperations instance
-     */
-    BatchesOperations batches();
-
-    /**
-     * @description Access to beta API operations
-     * @return BetaOperations instance
-     */
-    BetaOperations beta();
+        Http http = new Http();
+        return http.send(req);
+    }
 }

@@ -4,9 +4,9 @@
  * @version 1.0.0
  */
 public class ResponseOperationsImpl implements ResponseOperations {
-    private OpenAIOkHttpClient client;
+    private OpenAIClient client;
 
-    public ResponseOperationsImpl(OpenAIOkHttpClient client) {
+    public ResponseOperationsImpl(OpenAIClient client) {
         this.client = client;
     }
 
@@ -15,17 +15,14 @@ public class ResponseOperationsImpl implements ResponseOperations {
     }
 
     public Response create(ResponseCreateParams params, RequestOptions options) {
-        HttpRequest req = new HttpRequest();
-        req.setEndpoint(this.client.getBaseUrl() + '/responses');
-        req.setMethod('POST');
-        req.setHeader('Content-Type', 'application/json');
-        Boolean suppressApexObjectNulls = true;
-        req.setBody(JSON.serialize(params, suppressApexObjectNulls));
+        String body = JSON.serialize(params, true);
+        HttpResponse res = this.client.makeRequest('/responses', 'POST', body, options);
 
-        Http http = new Http();
-        HttpResponse res = http.send(req);
+        if (res.getStatusCode() >= 400) {
+            throw new IllegalStateException('API request failed: ' + res.getStatusCode() + ' - ' + res.getBody());
+        }
+
         String responseBody = res.getBody();
-        System.debug('Response Body: ' + responseBody);
         responseBody = responseBody.replaceAll('"object":', '"objectX":');
         return (Response) JSON.deserialize(responseBody, Response.class);
     }

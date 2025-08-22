@@ -6,8 +6,7 @@ An Apex implementation of the OpenAI API client, mimicking the structure and fun
 
 This project provides a Salesforce Apex implementation of the OpenAI API client that follows the same design patterns and structure as the official Java SDK. The implementation includes:
 
-- **OpenAIClient Interface**: Main interface defining all API operations
-- **OpenAIOkHttpClient**: Implementation using Salesforce HTTP callouts
+- **OpenAIClient**: Main client class using Salesforce HTTP callouts
 - **Builder Pattern**: Fluent API for creating parameters and options
 - **Model Classes**: Apex equivalents of OpenAI API models
 - **Operation Interfaces**: Organized API operations by category
@@ -46,7 +45,7 @@ The following Apex code is equivalent to the Java example from the openai-java r
 
 ```apex
 // Configures using a named credential and external credential
-OpenAIClient client = OpenAIOkHttpClient.fromNamedCredential('OpenAI');
+OpenAIClient client = OpenAIClient.fromNamedCredential('OpenAI');
 
 ResponseCreateParams params = ResponseCreateParams.builder()
     .input('Say this is a test')
@@ -60,8 +59,7 @@ Response response = client.responses().create(params);
 
 ### Core Components
 
-1. **OpenAIClient Interface**: Defines the contract for all API operations
-2. **OpenAIOkHttpClient**: Main implementation class
+1. **OpenAIClient**: Main client class with all API operations
 3. **Operation Interfaces**: Organized by API category (responses, chat, models, etc.)
 4. **Model Classes**: Apex representations of OpenAI API models
 5. **Parameter Classes**: Builder-pattern classes for API parameters
@@ -77,8 +75,7 @@ Response response = client.responses().create(params);
 
 ```
 force-app/main/default/classes/
-├── OpenAIClient.cls                           # Main interface
-├── OpenAIOkHttpClient.cls                     # Main implementation
+├── OpenAIClient.cls                           # Main client class
 ├── ResponseOperations.cls                      # Response operations interface
 ├── ResponseOperationsImpl.cls                  # Response operations implementation
 ├── ChatOperations.cls                          # Chat operations interface

@@ -4,9 +4,9 @@
  * @version 1.0.0
  */
 public class ChatCompletionsOperationsImpl implements ChatCompletionsOperations {
-    private OpenAIOkHttpClient client;
+    private OpenAIClient client;
 
-    public ChatCompletionsOperationsImpl(OpenAIOkHttpClient client) {
+    public ChatCompletionsOperationsImpl(OpenAIClient client) {
         this.client = client;
     }
 
