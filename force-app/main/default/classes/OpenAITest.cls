@@ -141,7 +141,7 @@ public class OpenAITest {
         // Verify response is created
         System.assertNotEquals(null, response, 'Response should not be null');
         System.assertNotEquals(null, response.id, 'Response ID should not be null');
-        // System.assertEquals('response', response.objectX, 'Response object should match');
+        System.assertEquals('response', response.objectX, 'Response object should match');
         System.assertEquals('GPT_4_1', response.model, 'Response model should match');
         System.assertNotEquals(null, response.output, 'Response output should not be null');
         System.assertEquals(1, response.output.size(), 'Response should have one output');

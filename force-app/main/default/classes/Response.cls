@@ -7,7 +7,6 @@ public class Response {
     @AuraEnabled
     public String id { get; set; }
 
-    @AuraEnabled
     public String objectX { get; set; }
 
     @AuraEnabled

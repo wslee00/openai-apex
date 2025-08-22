@@ -103,9 +103,6 @@ public class OpenAIOkHttpClient implements OpenAIClient {
          * @return OpenAIOkHttpClient instance
          */
         public OpenAIOkHttpClient build() {
-            if (String.isBlank(this.client.apiKey)) {
-                throw new IllegalStateException('API key is required');
-            }
             return this.client;
         }
     }
