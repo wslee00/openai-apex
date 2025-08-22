@@ -104,6 +104,9 @@ public class ResponseCreateParams {
          * @return This builder instance
          */
         public Builder putAdditionalBodyProperty(String key, Object value) {
+            if (this.params.additionalProperties == null) {
+                this.params.additionalProperties = new Map<String, Object>();
+            }
             this.params.additionalProperties.put(key, value);
             return this;
         }
