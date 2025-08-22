@@ -16,10 +16,9 @@ public class ResponseOperationsImpl implements ResponseOperations {
 
     public Response create(ResponseCreateParams params, RequestOptions options) {
         HttpRequest req = new HttpRequest();
-        req.setEndpoint(this.client.getBaseUrl() + '/responses');
+        req.setEndpoint('callout:OpenAI/v1/responses');
         req.setMethod('POST');
         req.setHeader('Content-Type', 'application/json');
-        req.setHeader('Authorization', 'Bearer ' + this.client.getApiKey());
         Boolean suppressApexObjectNulls = true;
         req.setBody(JSON.serialize(params, suppressApexObjectNulls));
 
