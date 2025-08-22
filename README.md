@@ -45,8 +45,8 @@ This is the first phase of implementation, focusing on the core structure and th
 The following Apex code is equivalent to the Java example from the openai-java repository:
 
 ```apex
-// Configures using the `OPENAI_API_KEY`, `OPENAI_ORG_ID` and `OPENAI_PROJECT_ID` environment variables
-OpenAIClient client = OpenAIOkHttpClient.fromEnv();
+// Configures using a named credential and external credential
+OpenAIClient client = OpenAIOkHttpClient.fromNamedCredential('OpenAI');
 
 ResponseCreateParams params = ResponseCreateParams.builder()
     .input('Say this is a test')

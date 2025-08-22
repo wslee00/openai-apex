@@ -76,6 +76,9 @@ public class ResponseCreateParams {
          * @return This builder instance
          */
         public Builder putAdditionalHeader(String key, String value) {
+            if (this.params.additionalHeaders == null) {
+                this.params.additionalHeaders = new Map<String, String>();
+            }
             this.params.additionalHeaders.put(key, value);
             return this;
         }
@@ -87,6 +90,9 @@ public class ResponseCreateParams {
          * @return This builder instance
          */
         public Builder putAdditionalQueryParam(String key, String value) {
+            if (this.params.additionalQueryParams == null) {
+                this.params.additionalQueryParams = new Map<String, String>();
+            }
             this.params.additionalQueryParams.put(key, value);
             return this;
         }

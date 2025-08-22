@@ -13,8 +13,8 @@ public class OpenAIExample {
      * import com.openai.models.responses.Response;
      * import com.openai.models.responses.ResponseCreateParams;
      *
-     * // Configures using the `OPENAI_API_KEY`, `OPENAI_ORG_ID` and `OPENAI_PROJECT_ID` environment variables
-     * OpenAIClient client = OpenAIOkHttpClient.fromEnv();
+     * // Configures using a named credential and external credential
+     * OpenAIClient client = OpenAIOkHttpClient.fromNamedCredential('OpenAI');
      *
      * ResponseCreateParams params = ResponseCreateParams.builder()
      *         .input("Say this is a test")
@@ -24,8 +24,8 @@ public class OpenAIExample {
      */
     public static void demonstrateOpenAIUsage() {
         try {
-            // Configures using the `OPENAI_API_KEY`, `OPENAI_ORG_ID` and `OPENAI_PROJECT_ID` environment variables
-            OpenAIClient client = OpenAIOkHttpClient.fromEnv();
+            // Configures using a named credential and external credential
+            OpenAIClient client = OpenAIOkHttpClient.fromNamedCredential('OpenAI');
 
             ResponseCreateParams params = ResponseCreateParams.builder()
                 .input('Say this is a test')
@@ -89,7 +89,7 @@ public class OpenAIExample {
      */
     public static void demonstrateChatCompletions() {
         try {
-            OpenAIClient client = OpenAIOkHttpClient.fromEnv();
+            OpenAIClient client = OpenAIOkHttpClient.fromNamedCredential('OpenAI');
 
             // Create chat completion params
             ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()

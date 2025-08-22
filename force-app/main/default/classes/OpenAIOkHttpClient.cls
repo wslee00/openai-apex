@@ -12,7 +12,7 @@ public class OpenAIOkHttpClient implements OpenAIClient {
     private Integer timeout;
 
     public OpenAIOkHttpClient() {
-        this.baseUrl = 'https://api.openai.com/v1';
+        this.baseUrl = 'callout:OpenAI/v1';
         this.responseValidation = false;
         this.timeout = 60000;
     }
@@ -21,14 +21,9 @@ public class OpenAIOkHttpClient implements OpenAIClient {
      * @description Create client from environment variables
      * @return OpenAIOkHttpClient instance
      */
-    public static OpenAIOkHttpClient fromEnv() {
+    public static OpenAIOkHttpClient fromNamedCredential(String namedCredential) {
         OpenAIOkHttpClient client = new OpenAIOkHttpClient();
-
-        // Get API key from Named Credential or Custom Setting
-        // For now, we'll use a placeholder approach
-        client.apiKey = getApiKeyFromEnv();
-        client.orgId = getOrgIdFromEnv();
-        client.projectId = getProjectIdFromEnv();
+        client.baseUrl = 'callout:' + namedCredential + '/v1';
 
         return client;
     }
@@ -191,23 +186,6 @@ public class OpenAIOkHttpClient implements OpenAIClient {
 
     public BetaOperations beta() {
         return new BetaOperationsImpl();
-    }
-
-    // Helper methods
-
-    private static String getApiKeyFromEnv() {
-        // TODO: Implement getting API key from Named Credential or Custom Setting
-        return 'your-api-key-here';
-    }
-
-    private static String getOrgIdFromEnv() {
-        // TODO: Implement getting org ID from Custom Setting
-        return null;
-    }
-
-    private static String getProjectIdFromEnv() {
-        // TODO: Implement getting project ID from Custom Setting
-        return null;
     }
 
     /**
